@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spaceship Wars</title>
+    <style>
+
+@font-face{
+    font-family:JUEGONAVES ;
+    src: url(Tipografias/m23.TTF);
+}
+
+        #Oso1{
+            height: 50%;
+            float: left;
+            margin: 1% 0 0 0 ;
+            border-radius: 20px;
+            width: 13%;
+            background-image: url("Sprites/Fondo1.png");
+
+        }
+        #Oso2{
+            float: right;
+            margin: 1% 0 0 0 ;
+            border-radius: 20px;
+            width: 13%;
+            background-image: url("Sprites/Fondo1.png");
+
+        }
+         #MICANVA{
+
+            margin: 1% 0 0 1% ;
+            border-radius: 20px;
+            width:70%;
+            background-image: url("Sprites/Fondo1.png");
+        }
+        body{
+           
+           background-color:#721907;;
+        }
+        nav{
+    
+            width: 20%;
+            padding: 0% ;
+            
+        }
+        a{
+            font-family: JUEGONAVES;
+            border-radius: 20px;
+            height: 100%;
+            width: 500%;
+            background-color: #892710;
+            display: block;
+            margin: 0% 0% 5% 0%;
+            padding: 2% 0% 2% 15%;
+            font-size: 25px;
+            text-decoration: none;
+            color: #F4DDD7;
+        }
+
+        a:hover{
+            background-color: #F4DDD7;
+            font-weight: bold;
+            color:#892710;
+        }
+        button{
+            font-family: JUEGONAVES;
+            height: 50px;
+            width: 20%;
+            color: #F4DDD7;
+            font-size: 20px;
+            background-color: #470e02;
+            border-style: none;
+            border-radius: 10px;
+        }
+
+        button:hover{
+            height: 55px;
+            width: 25%;
+            color: #721907;
+            font-size: 25px;
+            background-color: #F4DDD7;
+            
+        }
+        #MenuJugador1 h1{
+         font-size: 18px;
+            display: inline;
+            font-family: JUEGONAVES;
+            margin:  1%;
+            color: #F4DDD7;
+       }
+       #MenuJugador2 h1{
+         font-size: 18px;
+            display: inline;
+            font-family: JUEGONAVES;
+            margin:  1%;
+            color: #F4DDD7;
+       }
+
+       #MenuJugador1 {
+        float: left;
+        width: 12%;
+       }
+        
+       #MenuJugador2 {
+        float: right;
+        width: 12%;
+       }
+    </style>
+</head>
+
+<body >
+    <nav>
+        <a href="Spaceshio Wars.html"> <h1>Volver</h1></a>
+    </nav>
+    <div>
+        <button id="Empezar">Desafiar</button>
+    </div>
+    <div id="SFondo" src=""></div>
+
+    
+    <Canvas id="MICANVA" height="720" width="1080" style="border-style:solid" > 
+    </Canvas>
+    <Canvas id="Oso1" height="480" width="480" style="border-style:solid" > 
+    </Canvas>
+    
+    <Canvas id="Oso2" height="480" width="480" style="border-style:solid" > 
+    </Canvas>
+
+    <div  id="MenuJugador2">
+        <h1>
+            JUGADOR DOS
+        </h1>
+
+        
+    </div>
+
+
+    <div id="MenuJugador1">
+        <h1>
+            JUGADOR UNO
+        </h1>
+    </div>
+
+ <script>     
+
+    const EmpezarJuego=document.getElementById("Empezar")
+    EmpezarJuego.addEventListener('click', () => {
+   
+       Jugar();
+        Oso1D();
+        Oso2D();
+});
+function Oso1D(){
+
+    var canvas = document.getElementById("Oso1");
+    var ctx = canvas.getContext("2d");
+    var indiceXO=0;
+    var indiceYO=0;
+    var SpriteOso1=new Image();
+    Dibujando();
+    function Dibujando(){
+        SpriteOso1.src="Sprites/Polar.png";
+        ctx.drawImage(SpriteOso1,indiceXO*128,indiceYO*128,128,128,0,0,480,480,);
+    }
+    
+    setInterval(Dibujando,6)
+}
+    
+function Oso2D(){
+
+var canvas = document.getElementById("Oso2");
+var ctx = canvas.getContext("2d");
+var indiceXO=0;
+var indiceYO=0;
+var SpriteOso2=new Image();
+Dibujando2();
+function Dibujando2(){
+    SpriteOso2.src="Sprites/Grizzly.png";
+    ctx.drawImage(SpriteOso2,indiceXO*128,indiceYO*128,128,128,0,0,480,480,);
+}
+
+setInterval(Dibujando2,6)
+}
+
+
+
+function Jugar(){
+
+
+    
+    var canvas = document.getElementById("MICANVA");
+    var ctx = canvas.getContext("2d");
+ 
+    var SpriteBala= new Image();
+    var SpriteBala2= new Image();
+
+    var SpriteNave=new Image();
+    var SpriteNave2=new Image();
+    
+
+    var dx=-10;
+
+
+    var NaveVertical= 300;
+    var NaveHorizontal = canvas.width/2-400;
+
+    var Nave2Vertical= 300;
+    var Nave2Horizontal = canvas.width/2+300;
+
+    
+    var BalaVertical=0;
+    var BalaHorizontal=0;
+    
+    var Bala2Vertical=0;
+    var Bala2Horizontal=0;
+
+   
+
+    var TeclaDisparo=false;
+    var TeclaArriba=false;
+    var TeclaAbajo=false;
+    var TeclaDerecha=false;
+    var TeclaIzquierda=false;
+
+    var TeclaDisparo2=false;
+    var TeclaArriba2=false;
+    var TeclaAbajo2=false;
+    var TeclaDerecha2=false;
+    var TeclaIzquierda2=false;
+
+    var VidasNave=3;
+    var MuertesN=-1;
+    var MuertesN2=-1;
+    var VidasNave2=3;
+
+    var MuerteNave=false;
+    var MuerteNave2=false;
+
+    var indiceXN=0;
+    var indiceYN=0;
+
+    var indiceXN2=0;
+    var indiceYN2=0;
+
+
+    var indiceXB=0;
+
+    var JugadorPierde=false;
+    var Jugador2Pierde=false;
+
+    var Trofeo=new Image();
+    Trofeo.src="Sprites/Navetrofeo.png";
+
+    const SonidosF=document.getElementById('SFondo');
+    SonidosF.innerHTML='<audio src="Musica/MUSICAMULTI.mp3" autoplay loop></audio>';
+   
+    Dibujar();
+    
+    
+    function Dibujar(){
+ 
+    Limpiar();
+   
+    DibujarJugador();
+    DibujarJugador2();
+    DibujarBala(); 
+    DibujarBala2();
+    
+
+    MovimientoJugador();
+    MovimientoJugador2(); 
+    
+    MovimientoBala();
+    MovimientoBala2();
+
+    Colisciones();
+    }
+   
+    
+    
+  
+
+    function DibujarBala(){
+        SpriteBala.src="Sprites/Bala.png";
+
+        indiceXB+=1;
+        if (indiceXB>2)
+        {
+            indiceXB=0;
+        }
+           
+        
+    }
+    
+    function DibujarBala2(){
+        SpriteBala2.src="Sprites/Bala2.png";
+        
+
+        indiceXB+=1;
+        if (indiceXB>2)
+        {
+            indiceXB=0;
+        }
+           
+        
+    }
+      
+
+    function DibujarJugador(){
+        SpriteNave.src="Sprites/NaveV2.3.png";
+        ctx.drawImage(SpriteNave,indiceXN*64,indiceYN*64,64,64,NaveHorizontal,NaveVertical,128,128,);
+    
+       
+    }
+    
+    function DibujarJugador2(){
+        SpriteNave2.src="Sprites/NaveEnemiga.png";
+        ctx.drawImage(SpriteNave2,indiceXN2*74,indiceYN2*74,74,74,Nave2Horizontal,Nave2Vertical,128,128,);
+    
+       
+    }
+    
+    
+    function MovimientoBala(){              
+            if(TeclaDisparo){        
+                
+                ctx.drawImage(SpriteBala,indiceXB*64,0,64,64,BalaHorizontal+NaveHorizontal+110,BalaVertical+NaveVertical+32,64,64);
+            
+                    
+                if(BalaHorizontal!=1 ){ 
+                    BalaHorizontal-=dx; 
+
+                 
+                if(TeclaArriba && NaveVertical>0){  BalaVertical+=4;}
+                 if(TeclaAbajo && NaveVertical<600){  BalaVertical-=4;}
+
+                }
+            
+                if(BalaHorizontal>NaveHorizontal+500){
+                    BalaHorizontal=2;
+                    TeclaDisparo=false;
+                    BalaVertical=2;
+                } 
+                
+            }
+        }
+
+        function MovimientoBala2(){
+
+        
+        if(TeclaDisparo2){    
+            ctx.drawImage(SpriteBala2,indiceXB*64,0,64,64,Bala2Horizontal+Nave2Horizontal-35,Bala2Vertical+Nave2Vertical+30,64,64);  
+           
+                if(Bala2Horizontal!=700 ){
+                    Bala2Horizontal=Bala2Horizontal
+                    Bala2Horizontal+=dx; 
+
+                    if(TeclaArriba2 && Nave2Vertical>0){
+                        Bala2Vertical+=4;
+                    }
+                    if(TeclaAbajo2 && Nave2Vertical<600)
+                    {
+                        Bala2Vertical-=4
+                    }
+                }
+
+                if(Nave2Horizontal+Bala2Horizontal<Nave2Horizontal-690){
+                 
+                    Bala2Horizontal=2; 
+                    TeclaDisparo2=false
+                    Bala2Vertical=2;
+                }
+                
+
+              
+        }
+    }
+
+
+   
+
+
+  
+    function MovimientoJugador(){
+
+        if(TeclaAbajo|TeclaArriba|TeclaDerecha|TeclaIzquierda){ 
+                if(TeclaDerecha){
+                    NaveHorizontal+=3;
+                    indiceXN=1;
+                    }   
+                    
+        
+                    
+                if(TeclaIzquierda){
+                        NaveHorizontal-=3;
+                        indiceXN=0;
+                    }
+                 
+                 
+
+                if(TeclaArriba){
+                        NaveVertical-=4;
+                        indiceXN=1;
+                        indiceYN=1;
+                    } 
+            
+                 
+                if(TeclaAbajo){
+                        NaveVertical+=4;
+                        indiceXN=1;
+                        indiceYN=2;
+                    }
+              
+                
+             
+                    }
+                    else{
+                        indiceXN=0;
+                        indiceYN=0
+                    }
+                    if (NaveHorizontal<0){
+       
+                        NaveHorizontal+=4
+                    }
+
+                    if (NaveHorizontal>340){
+                    
+                        NaveHorizontal-=4
+                    }
+                    if (NaveVertical<0){
+                    
+                        NaveVertical+=4
+                    }
+
+                    if (NaveVertical>600){
+                    
+                        NaveVertical-=4
+                    }
+                    
+
+    }
+   
+    function MovimientoJugador2(){
+            
+        if(TeclaAbajo2|TeclaArriba2|TeclaDerecha2|TeclaIzquierda2){ 
+        if(TeclaDerecha2){
+            Nave2Horizontal+=3;
+            indiceXN2=1;
+           
+            }   
+            
+
+            
+        if(TeclaIzquierda2){
+                Nave2Horizontal-=3;
+                indiceXN2=1;
+                indiceYN2=1;
+            }
+         
+         
+
+        if(TeclaArriba2){
+                Nave2Vertical-=4;
+                indiceXN2=1;
+                indiceYN2=2;
+            } 
+    
+         
+        if(TeclaAbajo2){
+                Nave2Vertical+=4;
+                indiceXN2=1;
+                indiceYN2=2;
+            }
+
+           
+      
+            
+            }
+            else{
+                indiceXN2=0;
+                indiceYN2=0
+            }
+            if (Nave2Horizontal<660){
+
+                Nave2Horizontal+=4
+            }
+
+            if (Nave2Horizontal>990){
+            
+                Nave2Horizontal-=4
+            }
+            if (Nave2Vertical<0){
+            
+                Nave2Vertical+=4
+            }
+
+            if (Nave2Vertical>600){
+            
+                Nave2Vertical-=4
+            }
+
+}
+
+    
+
+    function Limpiar(){
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+  
+    } 
+
+        document.addEventListener("keydown", keyDownHandler, false);
+        document.addEventListener("keyup", keyUpHandler, false);
+
+        function keyDownHandler(e){
+            if(e.keyCode==76){
+                TeclaDerecha=true;
+            }
+            else if(e.keyCode==74){
+                TeclaIzquierda=true;
+             }
+            else if(e.keyCode==73){
+                TeclaArriba=true;
+            }
+            else if(e.keyCode==75){
+                TeclaAbajo=true;
+            }
+
+             if(e.keyCode==72){
+                TeclaDisparo=true
+            }
+
+
+            if(e.keyCode==68){
+                TeclaDerecha2=true;
+            }
+            else if(e.keyCode==65){
+                TeclaIzquierda2=true;
+             }
+            else if(e.keyCode==87){
+                TeclaArriba2=true;
+            }
+            else if(e.keyCode==83){
+                TeclaAbajo2=true;
+            }
+            if(e.keyCode==70){
+                TeclaDisparo2=true;
+            }
+
+
+        }
+        function keyUpHandler(e){
+            if(e.keyCode==76){
+                TeclaDerecha=false;
+            }
+            else if(e.keyCode==74){
+                TeclaIzquierda=false;
+             }
+             else if(e.keyCode==73){
+                TeclaArriba=false;
+            }
+            else if(e.keyCode==75){
+                TeclaAbajo=false;
+            }
+           
+
+            if(e.keyCode==68){
+                TeclaDerecha2=false;
+            }
+            else if(e.keyCode==65){
+                TeclaIzquierda2=false;
+             }
+             else if(e.keyCode==87){
+                TeclaArriba2=false;
+            }
+            else if(e.keyCode==83){
+                TeclaAbajo2=false;
+            }
+           
+
+
+
+        }
+     
+        function Colisciones(){
+           
+
+            if(NaveHorizontal>Bala2Horizontal+Nave2Horizontal-65 && NaveHorizontal<Bala2Horizontal+Nave2Horizontal+65 && NaveVertical>Bala2Vertical+Nave2Vertical-65 && NaveVertical<Bala2Vertical+Nave2Vertical+65)
+            {   indiceYO=1;
+                indiceYN=3;
+                indiceXN=0;
+                MuerteNave=true;
+            }
+            
+
+           
+           
+
+
+
+            if(Nave2Horizontal>BalaHorizontal+NaveHorizontal-65 && Nave2Horizontal<BalaHorizontal+NaveHorizontal+105 && Nave2Vertical>BalaVertical-50+NaveVertical && Nave2Vertical<BalaVertical+50+NaveVertical)
+            {
+                indiceYO=1;
+                indiceYN2=3;
+                indiceXN2=0;
+               MuerteNave2=true; 
+            } 
+            
+            
+        
+            if(MuerteNave&&Bala2Horizontal==2)
+                {
+
+                    MuertesN=MuertesN-1
+                    MuerteNave=false;
+                   
+                }
+
+            if(MuerteNave2 && BalaHorizontal==2)
+                {
+                    
+                    MuertesN2-=1;
+                    
+                    MuerteNave2=false; 
+                    
+                }
+        
+          if(MuerteNave && VidasNave+MuertesN==0){
+           
+            JugadorPierde=true;
+          } 
+
+          if(JugadorPierde){
+            FindelJuego2();
+          }
+          
+
+        if(MuerteNave2 && VidasNave2+MuertesN2==0)
+        {
+            Jugador2Pierde=true;
+        }
+
+          if(Jugador2Pierde){
+        
+            FindelJuego();
+
+
+
+          }
+        
+
+        
+        }
+
+        function FindelJuego(){
+            Limpiar();
+            SonidosF.innerHTML='<audio src="" autoplay loop></audio>';
+            ctx.fillStyle="#F4DDD7"
+            ctx.font="100px JUEGONAVES"
+            ctx.fillText("Gana jugador1",100,200)
+
+           
+            ctx.drawImage(Trofeo,0,0,320,320,350,300,320,320);
+        
+            
+        }
+        function FindelJuego2(){
+            Limpiar();       
+            SonidosF.innerHTML='<audio src="" autoplay loop></audio>';
+            ctx.fillStyle="#F4DDD7"
+            ctx.font="100px JUEGONAVES"
+            ctx.fillText("Gana jugador2",100,200)
+            
+            ctx.drawImage(Trofeo,0,0,320,320,350,300,320,320);
+        }
+        
+        
+    setInterval(Dibujar,6);
+   
+ }
+
+ </script>
+</body>
+</html>

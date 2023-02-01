@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spaceship Wars</title>
+    <style>
+        @font-face{
+            font-family:JUEGONAVES ;
+            src: url(Tipografias/m23.TTF);
+        }
+
+        canvas{
+            border-radius: 20px;
+            float: right;
+            width: 69%;
+            background-image: url("Sprites/Fondo1.png");
+        }
+        body{
+           
+           background-color:#721907;
+        }
+        nav{
+            float: left;
+            height: 500%;
+           
+            width: 20%;
+            padding: 3% 5% 0% 3%;
+
+        }
+        a{
+            text-align: center;
+            font-family: JUEGONAVES;
+            border-radius: 20px;
+            height: 200%;
+            width: 100%;
+            background-color: #892710;
+            display: block;
+            margin: 0% 0% 15% 0%;
+            padding: 10%;
+            font-size: 25px;
+            text-decoration: none;
+            color: #F4DDD7;
+        }
+
+        a:hover{
+            background-color: #F4DDD7;
+            font-weight: bold;
+            color:#892710;
+        }
+       
+      
+    </style>
+</head>
+
+<body >
+
+<nav>
+    
+            <a href="Multiplayer.html"> <h1>Versus</h1></a>
+
+            <a href="Campaña.html"><h1>Carrera</h1></a>
+      
+            <a href="Puntajes.html"><h1>Puntajes</h1></a>
+        
+    </ul>
+         
+    
+             
+           
+            
+     
+    
+    
+</nav>    
+    <Canvas id="MICANVA" height="720" width="1080" style="border-style:solid" > 
+    </Canvas>
+ <script>
+
+     var canvas = document.getElementById("MICANVA");
+     var ctx = canvas.getContext("2d");
+
+     var SpriteFondo=new Image();
+    var Portada=new Image();
+
+Dibujar();
+    
+   function Dibujar(){
+    DibujarFondo();
+    DibujarPortada();
+    
+    
+   }
+    function DibujarFondo(){ 
+        ctx.drawImage(SpriteFondo,0,0)
+        SpriteFondo.src="Sprites/Fondo1.png";
+       
+    
+}
+  
+    function DibujarPortada(){
+        ctx.drawImage(Portada,100,-60,850,850)
+       Portada.src="1x/Portada.png";
+        
+  
+    }
+setInterval(Dibujar,6)
+ </script>
+</body>
+</html>

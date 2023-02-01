@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spaceship Wars</title>
+    <style>
+    
+    </style>
+
+</head>
+<body>
+    <Canvas id="MICANVA" height="500" width="720" style="background-color: black;"></Canvas>
+    <script>
+        
+
+        var canvas = document.getElementById("MICANVA");
+        var ctx = canvas.getContext("2d");
+        var x = 1;
+        var y = 30;
+        var dx=-1;
+
+        var y2 = 300
+        var y3=400
+
+        var NaveAltura=250;
+        var NaveAncho= 75;
+        var NaveY = canvas.height/2;
+        var NaveX = canvas.width/2;
+
+
+        var DerechaPresionada=false;
+        var IzquierdaPresionada=false;
+        var ArribaPresionado=false;
+        var AbajoPresionado=false;
+    
+        function DibujarEnemigo(){
+            ctx.beginPath();
+            ctx.arc(x,y, 40, 0, Math.PI*2);
+            ctx.fillStyle = "Red";
+            ctx.fill(); 
+            ctx.closePath();
+
+            ctx.beginPath();
+            ctx.arc(x,y, 35, 0, Math.PI*2);
+            ctx.fillStyle = "yellow";
+            ctx.fill();
+            ctx.closePath();
+            
+            ctx.beginPath();
+            ctx.arc(x,y2, 30, 0, Math.PI*2);
+            ctx.fillStyle = "Red";
+            ctx.fill();
+            ctx.closePath();
+
+            ctx.beginPath();
+            ctx.arc(x,y2, 25, 0, Math.PI*2);
+            ctx.fillStyle = "yellow";
+            ctx.fill();
+            ctx.closePath();
+
+            ctx.beginPath();
+            ctx.arc(x,y3, 25, 0, Math.PI*2);
+            ctx.fillStyle = "Red";
+            ctx.fill();
+            ctx.closePath();
+
+            ctx.beginPath();
+            ctx.arc(x,y3, 20, 0, Math.PI*2);
+            ctx.fillStyle = "yellow";
+            ctx.fill();
+            ctx.closePath(); 
+        }
+
+        function DibujarNave(){
+            ctx.beginPath();
+            ctx.rect(NaveY, NaveX, 60, 40);
+            ctx.fillStyle = "white";
+            ctx.fill();
+            ctx.closePath();
+
+            ctx.beginPath();
+            ctx.rect(NaveY+30, NaveX+5, 25, 30);
+            ctx.fillStyle = "blue";
+            ctx.fill();
+            ctx.closePath();
+
+            ctx.beginPath();
+            ctx.rect(NaveY, NaveX-12, 20, 65);
+            ctx.fillStyle = "blue";
+            ctx.fill();
+            ctx.closePath();
+        
+
+            ctx.beginPath();
+            ctx.rect(NaveY-12, NaveX, 12, 10);
+            ctx.fillStyle = "gray";
+            ctx.fill();
+            ctx.closePath();
+
+            ctx.beginPath();
+            ctx.rect(NaveY-12, NaveX+30, 12, 10);
+            ctx.fillStyle = "gray";
+            ctx.fill();
+            ctx.closePath();
+
+
+        }
+
+        function Dibujar(){   
+            ctx.clearRect(0,0,canvas.width,canvas.height);
+            DibujarEnemigo();
+            if(x!=1){
+            x+=dx;
+            } if(x==1){
+                x+=720
+                y+=70
+                y2+=50
+                y3-=80
+            }
+            if(y>=500){
+                x+=720
+                y-=400
+                y2-=300
+                y3+=400
+            }
+            
+            
+
+            DibujarNave();
+
+            if(DerechaPresionada){
+                NaveY+=2;
+            }
+               if(IzquierdaPresionada){
+                NaveY-=2;
+            }
+            if(ArribaPresionado){
+                NaveX-=3;
+            }
+               if(AbajoPresionado){
+                NaveX+=3;
+            }
+            Fondo();
+
+            if(NaveY<=x+50 && NaveY>=x-50 && NaveX<=y+50 && NaveX>=y-50 || NaveY<=x+50 && NaveY>=x-50 && NaveX<=y2+50 && NaveX>=y2-50 || NaveY<=x+50 && NaveY>=x-50 && NaveX<=y3+50 && NaveX>=y3-50  ){
+            alert("PERDISTE")
+            document.location.reload();
+        }
+            
+        
+        }
+
+        document.addEventListener("keydown", keyDownHandler, false);
+        document.addEventListener("keyup", keyUpHandler, false);
+
+        function keyDownHandler(e){
+            if(e.keyCode==39){
+                DerechaPresionada=true;
+            }
+            else if(e.keyCode==37){
+                IzquierdaPresionada=true;
+             }
+            else if(e.keyCode==38){
+                ArribaPresionado=true;
+            }
+            else if(e.keyCode==40){
+                AbajoPresionado=true;
+            }
+        }
+        function keyUpHandler(e){
+            if(e.keyCode==39){
+                DerechaPresionada=false;
+            }
+            else if(e.keyCode==37){
+                IzquierdaPresionada=false;
+             }
+             else if(e.keyCode==38){
+                ArribaPresionado=false;
+            }
+            else if(e.keyCode==40){
+                AbajoPresionado=false;
+            }
+        }
+        function Fondo(){
+            ctx.beginPath();
+            ctx.arc(10,10, 5, 0, Math.PI*2);
+            ctx.fillStyle = "white";
+            ctx.fill();
+            ctx.closePath();
+            
+        }
+        
+       
+    
+        setInterval(Dibujar,10);
+
+       
+    </script>
+    
+</body>
+</html>

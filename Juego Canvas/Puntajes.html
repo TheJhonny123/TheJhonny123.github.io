@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spaceship Wars</title>
+    <style>
+
+@font-face{
+    font-family:JUEGONAVES ;
+    src: url(Tipografias/m23.TTF);
+}
+
+        canvas{
+            margin: 1% 0 0 0 ;
+            border-radius: 20px;
+            width:70%;
+            background-image: url("Sprites/Fondo1.png");
+        }
+        body{
+           
+            background-color:#721907;
+        }
+        nav{
+          
+            width: 20%;
+            padding: 0;
+
+        }
+        a{
+            font-family: JUEGONAVES;
+            border-radius: 20px;
+            height: 100%;
+            width: 500%;
+            background-color: #892710;
+            display: block;
+            margin: 0% 0% 5% 0%;
+            padding: 2% 0% 2% 15%;
+            font-size: 25px;
+            text-decoration: none;
+            color: #F4DDD7;
+        }
+
+        a:hover{
+            background-color: #F4DDD7;
+            font-weight: bold;
+            color:#892710;
+        }
+        
+        button{
+            font-family: JUEGONAVES;
+            height: 50px;
+            width: 20%;
+            color: #F4DDD7;
+            font-size: 20px;
+            background-color: #470e02;
+            border-style: none;
+            border-radius: 10px;
+        }
+
+        button:hover{
+            height: 55px;
+            width: 25%;
+            color: #721907;
+            font-size: 25px;
+            background-color: #F4DDD7;
+            
+        }
+    </style>
+</head>
+
+<body onload="DibujarScore()" >
+<nav>
+            <a href="Spaceshio Wars.html"> <h1>Volver</h1></a>
+</nav>    
+<div id="SonidoFondo"></div>
+
+    <Canvas id="MICANVA" height="720" width="1080" style="border-style:solid" > 
+    </Canvas>
+<script>
+  
+  
+    function DibujarScore(){
+        var canvas = document.getElementById("MICANVA");
+        var ctx = canvas.getContext("2d");
+        var PuntajeenDificil=localStorage.getItem("PuntajeDificil")
+        var PuntajeenNormal=localStorage.getItem("PuntajeNormal")
+        ctx.fillStyle="#721907"
+        ctx.font="50px JUEGONAVES"
+        ctx.fillText("Puntaje en Dificil",110,150); 
+        ctx.fillText("Puntaje en Normal",110,450);
+        ctx.font="100px JUEGONAVES"
+        ctx.fillStyle="#F4DDD7"
+        ctx.fillText(PuntajeenDificil,110,300);
+        ctx.fillText(PuntajeenNormal,110,600);
+    }
+            
+
+ </script>
+</body>
+</html>

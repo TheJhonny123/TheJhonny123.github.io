@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spaceship Wars</title>
+    <style>
+
+@font-face{
+    font-family:JUEGONAVES ;
+    src: url(Tipografias/m23.TTF);
+}
+
+        canvas{
+            margin: 1% 0 0 0 ;
+            border-radius: 20px;
+            width:70%;
+            background-image: url("Sprites/Fondo1.png");
+        }
+        body{
+           
+            background-color:#721907;
+        }
+        nav{
+          
+            width: 20%;
+            padding: 0;
+
+        }
+        a{
+            font-family: JUEGONAVES;
+            border-radius: 20px;
+            height: 100%;
+            width: 500%;
+            background-color: #892710;
+            display: block;
+            margin: 0% 0% 5% 0%;
+            padding: 2% 0% 2% 15%;
+            font-size: 25px;
+            text-decoration: none;
+            color: #F4DDD7;
+        }
+
+        a:hover{
+            background-color: #F4DDD7;
+            font-weight: bold;
+            color:#892710;
+        }
+        
+        button{
+            font-family: JUEGONAVES;
+            height: 50px;
+            width: 20%;
+            color: #F4DDD7;
+            font-size: 20px;
+            background-color: #470e02;
+            border-style: none;
+            border-radius: 10px;
+        }
+
+        button:hover{
+            height: 55px;
+            width: 25%;
+            color: #721907;
+            font-size: 25px;
+            background-color: #F4DDD7;
+            
+        }
+    </style>
+</head>
+
+<body onload="SelecionarDificultad();" >
+<nav>
+            <a href="Spaceshio Wars.html"> <h1>Volver</h1></a>
+</nav>    
+<div>
+
+            <button id="Dificil">Dificil</button>
+            <button id="Normal">Normal</button>
+
+</div>
+<div id="SonidoFondo"></div>
+
+    <Canvas id="MICANVA" height="720" width="1080" style="border-style:solid" > 
+    </Canvas>
+<script>
+
+  
+function SelecionarDificultad(){
+
+const DDificil=document.getElementById('Dificil');
+const DNormal = document.getElementById('Normal');
+
+
+
+DNormal.addEventListener('click', () => {
+	 
+        Normal();
+      
+   
+});
+
+DDificil.addEventListener('click', () => {
+       
+		Dificil();
+	
+});
+
+  }
+
+
+  function Dificil(){
+    alert('La Dificultad será: Difícil');
+    const Sonidos=document.getElementById('SonidoFondo')
+    Sonidos.innerHTML='<audio src="Musica/MUSICAJUEGO.mp3" autoplay loop></audio>';
+    var ReguladorEnemigos;
+    var canvas = document.getElementById("MICANVA");
+    var ctx = canvas.getContext("2d");
+    var SpriteSol= new Image();
+    var SpriteNave=new Image();
+    var dx=-5;
+
+
+
+    var NaveVertical= 300;
+    var NaveHorizontal = canvas.width/2-300;
+    
+    var SolVertical=canvas.width/2 ;
+    var SolHorizontal=canvas.width+50;
+
+    var Sol2Vertical=canvas.width/3 ;
+    var Sol2Horizontal=canvas.width+100;
+  
+    var Sol3Vertical=-canvas.width/2 ;
+    var Sol3Horizontal=canvas.width+10;
+
+    var TeclaArriba=false;
+    var TeclaAbajo=false;
+    var TeclaDerecha=false;
+    var TeclaIzquierda=false;
+
+    var Chocando=false;
+    var Choquesoles=false;
+
+    var indiceXN=0;
+    var indiceYN=0;
+
+    var indiceXS=0;
+  
+
+    var Score=0;
+    var Scoreactivo=true;
+    Dibujar();
+
+    function Dibujar(){
+    Limpiar();
+    DibujarJugador();
+    DibujarEnemigo(); 
+   
+    MovimientoEnemigo();
+    MovimientoJugador(); 
+    Colisciones();
+    Aceleracion(); 
+    DibujarScore();
+    }
+   
+    
+    
+    
+    function DibujarScore(){
+       if(Scoreactivo){
+         ctx.fillStyle="#F4DDD7"
+            ctx.font="50px JUEGONAVES"
+            ctx.fillText(Score,100,100);
+
+       }
+       
+         if(NaveHorizontal+10>SolHorizontal|NaveHorizontal+10>Sol2Horizontal|NaveHorizontal+10>Sol3Horizontal && Chocando==false)
+        { 
+            
+            Score+=10;
+            
+        }
+
+
+
+    }
+    function DibujarEnemigo(){
+        SpriteSol.src="Sprites/SolV2.png";
+        ctx.drawImage(SpriteSol,indiceXS*64,0,64,64,SolHorizontal,SolVertical,96,96)
+        ctx.drawImage(SpriteSol,indiceXS*64,0,64,64,Sol2Horizontal,Sol2Vertical,96,96)
+        ctx.drawImage(SpriteSol,indiceXS*64,0,64,64,Sol3Horizontal,Sol3Vertical,96,96)
+
+    
+        indiceXS+=1;
+        if (indiceXS>2)
+        {
+            indiceXS=0;
+        }
+        
+    }
+      
+
+    function DibujarJugador(){
+        SpriteNave.src="Sprites/NaveV2.1.png";
+        ctx.drawImage(SpriteNave,indiceXN*64,indiceYN*64,64,64,NaveHorizontal,NaveVertical,96,96,);
+    
+       
+    }
+    
+
+    
+
+    function MovimientoEnemigo(){
+
+    if(SolHorizontal!=1){
+            SolHorizontal+=dx;
+    }
+    
+
+    if(SolHorizontal<0){
+            SolHorizontal=canvas.width+20;
+            SolVertical=Math.random()*500;
+    }
+    
+
+    if(Sol2Horizontal!=1 ){
+            Sol2Horizontal+=dx;
+    }
+    
+
+    if(Sol2Horizontal<0){
+            Sol2Horizontal=canvas.width+100;
+            Sol2Vertical=Math.random()*500;
+    }
+
+    if(Sol3Horizontal!=1 ){
+            Sol3Horizontal+=dx;
+    }
+    
+
+    if(Sol3Horizontal<0){
+            Sol3Horizontal=canvas.width+150;
+            Sol3Vertical=NaveVertical;
+    }
+
+
+
+    }
+    function MovimientoJugador(){
+
+        if(TeclaAbajo|TeclaArriba|TeclaDerecha|TeclaIzquierda){ 
+                if(TeclaDerecha){
+                 
+    
+                    NaveHorizontal+=3;
+                    indiceXN=1;
+                    }   
+                    
+        
+                    
+                if(TeclaIzquierda){
+                        NaveHorizontal-=3;
+                        indiceXN=0;
+                    }
+                 
+                 
+
+                if(TeclaArriba){
+                        NaveVertical-=4;
+                        indiceXN=1;
+                        indiceYN=1;
+                    } 
+            
+                 
+                if(TeclaAbajo){
+                        NaveVertical+=4;
+                        indiceXN=1;
+                        indiceYN=2;
+                    }
+
+
+                    }
+                    else{
+                        indiceXN=0;
+                        indiceYN=0
+                    }
+                    if (NaveHorizontal<0){
+       
+                        NaveHorizontal+=4
+                    }
+
+                    if (NaveHorizontal>990){
+                    
+                        NaveHorizontal-=4
+                    }
+                    if (NaveVertical<0){
+                    
+                        NaveVertical+=4
+                    }
+
+                    if (NaveVertical>625){
+                    
+                        NaveVertical-=4
+                    }
+
+    }
+   
+
+    
+
+    function Limpiar(){
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+  
+    } 
+
+        document.addEventListener("keydown", keyDownHandler, false);
+        document.addEventListener("keyup", keyUpHandler, false);
+
+        function keyDownHandler(e){
+            if(e.keyCode==68){
+                TeclaDerecha=true;
+            }
+            else if(e.keyCode==65){
+                TeclaIzquierda=true;
+             }
+            else if(e.keyCode==87){
+                TeclaArriba=true;
+            }
+            else if(e.keyCode==83){
+                TeclaAbajo=true;
+            }
+        }
+        function keyUpHandler(e){
+            if(e.keyCode==68){
+                TeclaDerecha=false;
+            }
+            else if(e.keyCode==65){
+                TeclaIzquierda=false;
+             }
+             else if(e.keyCode==87){
+                TeclaArriba=false;
+            }
+            else if(e.keyCode==83){
+                TeclaAbajo=false;
+            }
+        }
+     
+        function Colisciones(){
+            if(NaveHorizontal>Sol2Horizontal-65 && NaveHorizontal<Sol2Horizontal+65 && NaveVertical>Sol2Vertical-65 && NaveVertical<Sol2Vertical+65)
+            {
+                Chocando=true;
+            }
+            else
+            if(NaveHorizontal>SolHorizontal-65 && NaveHorizontal<SolHorizontal+65 && NaveVertical>SolVertical-65 && NaveVertical<SolVertical+65)
+            {
+                Chocando=true;
+            }
+            else
+            if(NaveHorizontal>Sol3Horizontal-65 && NaveHorizontal<Sol3Horizontal+65 && NaveVertical>Sol3Vertical-65 && NaveVertical<Sol3Vertical+65)
+            {
+                Chocando=true;
+            }
+
+            if (Chocando){
+                FindelJuego();
+            }
+
+
+            if(Sol2Vertical>Sol3Vertical-85 && Sol2Vertical<Sol3Vertical+85 && Sol2Horizontal>Sol3Horizontal-85 && Sol2Horizontal<Sol3Horizontal+85)
+            {
+                Sol2Vertical==  Sol2Vertical-50;
+                Sol2Horizontal==  Sol2Horizontal+50;
+            }
+          
+            if(SolVertical>Sol3Vertical-85 && SolVertical<Sol3Vertical+85 && SolHorizontal>Sol3Horizontal-85 && SolHorizontal<Sol3Horizontal+85)
+            {
+                SolVertical==  SolVertical+50;
+                SolHorizontal==  SolHorizontal+50;
+            }
+
+        }
+
+        function Aceleracion(){
+            dx=dx-=0.003
+        }
+        function FindelJuego(){
+            
+            Limpiar();
+            Scoreactivo=false;
+           ctx.fillStyle="#F4DDD7";
+           ctx.font="100px JUEGONAVES";
+           ctx.fillText("Puntaje:",280,250);
+           ctx.fillText(Score,400,400);
+           Sonidos.innerHTML='<audio src="" autoplay></audio>';
+           localStorage.setItem("PuntajeDificil",Score);
+        }
+    setInterval(Dibujar,6);
+  
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  function Normal(){
+    alert('La Dificultad será: Normal');
+    const Sonidos=document.getElementById('SonidoFondo')
+    Sonidos.innerHTML='<audio src="Musica/MUSICAJUEGO.mp3" autoplay loop></audio>';
+    var canvas = document.getElementById("MICANVA");
+    var ctx = canvas.getContext("2d");
+    var SpriteSol= new Image();
+    var SpriteNave=new Image();
+    var SpriteFondo=new Image();
+    var dx=-4;
+
+
+    var NaveVertical= 300;
+    var NaveHorizontal = canvas.width/2-300;
+    
+    var SolVertical=canvas.width/2 ;
+    var SolHorizontal=canvas.width+50;
+
+    var Sol2Vertical=canvas.width/3 ;
+    var Sol2Horizontal=canvas.width+100;
+  
+    var Sol3Vertical=-canvas.width/2 ;
+    var Sol3Horizontal=canvas.width+10;
+
+    var TeclaArriba=false;
+    var TeclaAbajo=false;
+    var TeclaDerecha=false;
+    var TeclaIzquierda=false;
+
+    var Chocando=false;
+    var Choquesoles=false;
+
+    var indiceXN=0;
+    var indiceYN=0;
+
+    var indiceXS=0;
+
+    var Scoreactivo=true;
+    Dibujar();
+
+    var Score=0;
+    function Dibujar(){
+    Limpiar();
+    DibujarJugador();
+    DibujarEnemigo(); 
+    MovimientoEnemigo();
+    MovimientoJugador(); 
+    Colisciones();
+    Aceleracion();
+    DibujarScore();
+
+    }
+   
+    
+    
+      
+    function DibujarScore(){
+
+        if(Scoreactivo)
+        {
+            ctx.fillStyle="#F4DDD7"
+            ctx.font="50px JUEGONAVES"
+            ctx.fillText(Score,100,100);
+
+        }
+            
+
+         if(NaveHorizontal+10>SolHorizontal|NaveHorizontal+10>Sol2Horizontal|NaveHorizontal+10>Sol3Horizontal && Chocando==false)
+        {  
+            Score+=10;
+            
+        }
+    }
+    
+
+    function DibujarEnemigo(){
+        SpriteSol.src="Sprites/SolV2.png";
+        ctx.drawImage(SpriteSol,indiceXS*64,0,64,64,SolHorizontal,SolVertical,96,96)
+        ctx.drawImage(SpriteSol,indiceXS*64,0,64,64,Sol2Horizontal,Sol2Vertical,96,96)
+        ctx.drawImage(SpriteSol,indiceXS*64,0,64,64,Sol3Horizontal,Sol3Vertical,96,96)
+
+    
+        indiceXS+=1;
+        if (indiceXS>2)
+        {
+            indiceXS=0;
+        }
+           
+        
+    }
+      
+
+    function DibujarJugador(){
+        SpriteNave.src="Sprites/NaveV2.1.png";
+        ctx.drawImage(SpriteNave,indiceXN*64,indiceYN*64,64,64,NaveHorizontal,NaveVertical,96,96,);
+    
+       
+    }
+    
+
+    
+
+    function MovimientoEnemigo(){
+
+    if(SolHorizontal!=1){
+            SolHorizontal+=dx;
+    }
+    
+
+    if(SolHorizontal<0){
+            SolHorizontal=canvas.width+20;
+            SolVertical=Math.random()*500
+    }
+    
+
+    if(Sol2Horizontal!=1 ){
+            Sol2Horizontal+=dx;
+    }
+    
+
+    if(Sol2Horizontal<0){
+            Sol2Horizontal=canvas.width+100;
+            Sol2Vertical=Math.random()*500;
+    }
+
+    if(Sol3Horizontal!=1 ){
+            Sol3Horizontal+=dx;
+    }
+    
+
+    if(Sol3Horizontal<0){
+            Sol3Horizontal=canvas.width+150;
+            Sol3Vertical=NaveVertical;
+    }
+
+
+
+    }
+    function MovimientoJugador(){
+
+        if(TeclaAbajo|TeclaArriba|TeclaDerecha|TeclaIzquierda){ 
+                if(TeclaDerecha){
+                    NaveHorizontal+=3;
+                    indiceXN=1;
+                    }   
+                    
+        
+                    
+                if(TeclaIzquierda){
+                        NaveHorizontal-=3;
+                        indiceXN=0;
+                    }
+                 
+                 
+
+                if(TeclaArriba){
+                        NaveVertical-=4;
+                        indiceXN=1;
+                        indiceYN=1;
+                    } 
+            
+                 
+                if(TeclaAbajo){
+                        NaveVertical+=4;
+                        indiceXN=1;
+                        indiceYN=2;
+                    }
+
+
+                    }
+                    else{
+                        indiceXN=0;
+                        indiceYN=0
+                    }
+                    if (NaveHorizontal<0){
+       
+                        NaveHorizontal+=4
+                    }
+
+                    if (NaveHorizontal>990){
+                    
+                        NaveHorizontal-=4
+                    }
+                    if (NaveVertical<0){
+                    
+                        NaveVertical+=4
+                    }
+
+                    if (NaveVertical>625){
+                    
+                        NaveVertical-=4
+                    }
+
+    }
+   
+
+    
+
+    function Limpiar(){
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+  
+    } 
+
+        document.addEventListener("keydown", keyDownHandler, false);
+        document.addEventListener("keyup", keyUpHandler, false);
+        function keyDownHandler(e){
+            if(e.keyCode==68){
+                TeclaDerecha=true;
+            }
+            else if(e.keyCode==65){
+                TeclaIzquierda=true;
+             }
+            else if(e.keyCode==87){
+                TeclaArriba=true;
+            }
+            else if(e.keyCode==83){
+                TeclaAbajo=true;
+            }
+        }
+        function keyUpHandler(e){
+            if(e.keyCode==68){
+                TeclaDerecha=false;
+            }
+            else if(e.keyCode==65){
+                TeclaIzquierda=false;
+             }
+             else if(e.keyCode==87){
+                TeclaArriba=false;
+            }
+            else if(e.keyCode==83){
+                TeclaAbajo=false;
+            }
+        }
+     
+        function Colisciones(){
+            if(NaveHorizontal>Sol2Horizontal-65 && NaveHorizontal<Sol2Horizontal+65 && NaveVertical>Sol2Vertical-65 && NaveVertical<Sol2Vertical+65)
+            {
+                Chocando=true;
+            }
+            else
+            if(NaveHorizontal>SolHorizontal-65 && NaveHorizontal<SolHorizontal+65 && NaveVertical>SolVertical-65 && NaveVertical<SolVertical+65)
+            {
+                Chocando=true;
+            }
+            else
+            if(NaveHorizontal>Sol3Horizontal-65 && NaveHorizontal<Sol3Horizontal+65 && NaveVertical>Sol3Vertical-65 && NaveVertical<Sol3Vertical+65)
+            {
+                Chocando=true;
+            }
+
+            if (Chocando){
+                FindelJuego();
+            }
+
+
+            if(Sol2Vertical>Sol3Vertical-85 && Sol2Vertical<Sol3Vertical+85 && Sol2Horizontal>Sol3Horizontal-85 && Sol2Horizontal<Sol3Horizontal+85)
+            {
+                Sol2Vertical==  Sol2Vertical-50;
+                Sol2Horizontal==  Sol2Horizontal+50;
+            }
+          
+            if(SolVertical>Sol3Vertical-85 && SolVertical<Sol3Vertical+85 && SolHorizontal>Sol3Horizontal-85 && SolHorizontal<Sol3Horizontal+85)
+            {
+                SolVertical==  SolVertical+50;
+                SolHorizontal==  SolHorizontal+50;
+            }
+           
+
+
+
+        }
+
+
+        function Aceleracion(){
+            dx=dx-=0.001
+        }
+       
+        function FindelJuego(){
+           Limpiar();
+           Scoreactivo=false;
+           ctx.fillStyle="#F4DDD7"
+           ctx.font="100px JUEGONAVES"
+           ctx.fillText("Puntaje:",280,250);
+           ctx.fillText(Score,390,400)
+           Sonidos.innerHTML='<audio src="" autoplay></audio>';
+           localStorage.setItem("PuntajeNormal",Score);
+           
+        }
+        
+    setInterval(Dibujar,6);
+   
+  }
+
+
+ </script>
+</body>
+</html>
